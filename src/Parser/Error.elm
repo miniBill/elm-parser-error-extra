@@ -172,7 +172,7 @@ deadEndToString output extract lines ( head, tail ) =
                         [ x ] ->
                             [ "Expecting " ++ x ]
 
-                        l ->
+                        (_ :: _ :: _) as l ->
                             [ "Expecting one of "
                                 ++ String.join ", " l
                             ]
