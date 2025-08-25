@@ -135,9 +135,9 @@ deadEndToString output extract lines ( head, tail ) =
             (head :: tail)
                 |> List.Extra.gatherEqualsBy extract.contextStack
                 |> List.map
-                    (\( ihead, itail ) ->
-                        ( extract.contextStack ihead
-                        , List.map .problem (ihead :: itail)
+                    (\( groupHead, groupTail ) ->
+                        ( extract.contextStack groupHead
+                        , List.map .problem (groupHead :: groupTail)
                         )
                     )
 
@@ -152,13 +152,13 @@ deadEndToString output extract lines ( head, tail ) =
             let
                 ( expected, other ) =
                     List.foldl
-                        (\problem ( eacc, oacc ) ->
+                        (\problem ( expectedAcc, otherAcc ) ->
                             case extract.problemToString problem of
                                 Expected e ->
-                                    ( Set.insert e eacc, oacc )
+                                    ( Set.insert e expectedAcc, otherAcc )
 
                                 Other o ->
-                                    ( eacc, Set.insert o oacc )
+                                    ( expectedAcc, Set.insert o otherAcc )
                         )
                         ( Set.empty, Set.empty )
                         problems
