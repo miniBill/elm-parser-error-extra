@@ -1,0 +1,8 @@
+{
+    "name": "elm-parser-error-extra",
+    "license": "BSD-3-Clause",
+    "type": "module",
+    "devDependencies": {
+        "elm-review": "^2.13.4"
+    }
+}
