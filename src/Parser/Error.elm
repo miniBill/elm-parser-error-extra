@@ -40,10 +40,10 @@ type alias DeadEnd inner problem =
 -}
 type alias Output out =
     { text : String -> out
-    , colorCaret : out -> out
+    , formatCaret : out -> out
     , newline : out
-    , colorContext : out -> out
-    , context : Int
+    , formatContext : out -> out
+    , linesOfExtraContext : Int
     }
 
 
@@ -189,7 +189,7 @@ deadEndToString output extract lines ( head, tail ) =
             else
                 Line
                     [ output.text "- "
-                    , output.colorContext (output.text (contextStackToString contextStack))
+                    , output.formatContext (output.text (contextStackToString contextStack))
                     , output.text ":"
                     ]
                     :: problemsLines
@@ -210,15 +210,15 @@ formatSourceFragment output head lines =
         before : List ( Int, String )
         before =
             lines
-                |> List.drop (head.row - output.context)
-                |> List.take output.context
+                |> List.drop (head.row - output.linesOfExtraContext)
+                |> List.take output.linesOfExtraContext
                 |> List.Extra.takeWhile (\( i, _ ) -> i < head.row)
 
         after : List ( Int, String )
         after =
             lines
                 |> List.drop head.row
-                |> List.take output.context
+                |> List.take output.linesOfExtraContext
 
         formatLine : ( Int, String ) -> Line a
         formatLine ( row, l ) =
@@ -243,7 +243,7 @@ formatSourceFragment output head lines =
         caret =
             Line
                 [ output.text (String.repeat (numLength + head.col + 1) " ")
-                , output.colorCaret (output.text "^")
+                , output.formatCaret (output.text "^")
                 ]
     in
     List.map formatLine before
